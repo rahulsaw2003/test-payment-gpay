@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Pay Payment</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .payment-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .order-summary h3 {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+            padding-top: 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1a1a2e;
+        }
+
+        .order-item span:first-child {
+            color: #444;
+        }
+
+        .order-item span:last-child {
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+
+        #gpay-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 26, 46, 0.3);
+        }
+
+        #gpay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 26, 46, 0.4);
+        }
+
+        #gpay-button:active {
+            transform: translateY(0);
+        }
+
+        #gpay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #gpay-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .gpay-icon {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gpay-icon span {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .gpay-icon .g { color: #4285f4; }
+        .gpay-icon .p { color: #34a853; }
+        .gpay-icon .a { color: #fbbc05; }
+        .gpay-icon .y { color: #ea4335; }
+
+        #status-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        #status-message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        #status-message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        #status-message.info {
+            display: block;
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+
+        .security-note {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .security-note svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="logo">G</div>
+        <h1>Complete Your Payment</h1>
+        <p class="subtitle">Fast & secure payment with Google Pay</p>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="order-item">
+                <span>Product</span>
+                <span>Sample Item</span>
+            </div>
+            <div class="order-item">
+                <span>Quantity</span>
+                <span>1</span>
+            </div>
+            <div class="order-item">
+                <span>Total</span>
+                <span>₹1.00</span>
+            </div>
+        </div>
+
+        <button id="gpay-button">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            Pay with Google Pay
+        </button>
+
+        <div id="status-message"></div>
+
+        <div class="security-note">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            </svg>
+            Secured by Google Pay
+        </div>
+    </div>
+
+    <script src="gpay.js"></script>
+</body>
+</html>
+
